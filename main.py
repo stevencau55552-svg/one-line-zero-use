@@ -30,12 +30,16 @@ LINE = (
 
 
 def main() -> None:
-    assert 1 <= len(LINE) <= 200, f"line is {len(LINE)} chars"
-    assert LINE.strip() == LINE and LINE.strip(), "line must not be blank"
-    assert "\n" not in LINE, "entry must be a single line"
+    # Gate guard (RULES.txt): entry.txt must be UTF-8 text of 1 to 200
+    # characters, a single line, not only white space. Normalise first so
+    # a stray space from a later edit can never ship an invalid entry.
+    line = LINE.strip()
+    assert 1 <= len(line) <= 200, f"line is {len(line)} chars"
+    assert "\n" not in line, "entry must be a single line"
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(LINE)
+        f.write(line)
+    print(f"wrote {len(line)} chars to /output/entry.txt")
 
 
 if __name__ == "__main__":
